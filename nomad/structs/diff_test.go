@@ -3398,6 +3398,9 @@ func TestTaskDiff(t *testing.T) {
 								Interval:      1 * time.Second,
 								Timeout:       1 * time.Second,
 								InitialStatus: "critical",
+								Header: map[string][]string{
+									"Foo": {"bar"},
+								},
 							},
 						},
 					},
@@ -3418,6 +3421,11 @@ func TestTaskDiff(t *testing.T) {
 								Interval:      1 * time.Second,
 								Timeout:       1 * time.Second,
 								InitialStatus: "passing",
+								Method:        "POST",
+								Header: map[string][]string{
+									"Foo":  {"bar", "baz"},
+									"Eggs": {"spam"},
+								},
 							},
 						},
 					},
@@ -3473,6 +3481,12 @@ func TestTaskDiff(t *testing.T) {
 										New:  "1000000000",
 									},
 									{
+										Type: DiffTypeAdded,
+										Name: "Method",
+										Old:  "",
+										New:  "POST",
+									},
+									{
 										Type: DiffTypeNone,
 										Name: "Name",
 										Old:  "foo",
@@ -3513,6 +3527,32 @@ func TestTaskDiff(t *testing.T) {
 										Name: "Type",
 										Old:  "http",
 										New:  "tcp",
+									},
+								},
+								Objects: []*ObjectDiff{
+									{
+										Type: DiffTypeEdited,
+										Name: "Header",
+										Fields: []*FieldDiff{
+											{
+												Type: DiffTypeAdded,
+												Name: "Eggs[0]",
+												Old:  "",
+												New:  "spam",
+											},
+											{
+												Type: DiffTypeNone,
+												Name: "Foo[0]",
+												Old:  "bar",
+												New:  "bar",
+											},
+											{
+												Type: DiffTypeAdded,
+												Name: "Foo[1]",
+												Old:  "",
+												New:  "baz",
+											},
+										},
 									},
 								},
 							},
